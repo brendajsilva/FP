@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | FP Sellection</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-split">
+        <div class="login-left">
+            <form class="login-box" id="login-form">
+                <h1>Faça seu <span class="gradient-text">Login</span>.</h1>
+                <div class="input-group">
+                    <label for="user">Email</label>
+                    <input type="text" id="user" name="user" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+                <div id="login-message" class="login-message"></div>
+                <button type="submit">Entrar</button>
+                <a href="cadastro.html" class="signup-link">Ainda não tenho uma conta</a>
+            </form>
+            <footer>
+                <small>2025 | Desenvolvido por <a href="#">Brenda Julya</a></small>
+            </footer>
+        </div>
+        <div class="login-right"></div>
+    </div>
+    <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = document.getElementById('user').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const found = users.find(u => u.user === user && u.password === password);
+        const msg = document.getElementById('login-message');
+        msg.textContent = ''; // Limpa mensagem
+
+        if (found) {
+            sessionStorage.setItem('loggedUser', user);
+            window.location.href = "index.html";
+        } else {
+            msg.textContent = 'Usuário ou senha inválidos!';
+            msg.classList.add('show');
+        }
+    });
+    </script>
+</body>
+</html>

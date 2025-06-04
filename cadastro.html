@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | FP Sellection</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-split">
+        <div class="login-left">
+            <form class="login-box" id="cadastro-form">
+                <h1>Crie sua <span class="gradient-text">Conta</span>.</h1>
+                <div class="input-group">
+                    <label for="user">Email</label>
+                    <input type="text" id="user" name="user" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required autocomplete="new-password">
+                </div>
+                <div id="cadastro-message" class="login-message"></div>
+                <button type="submit">Cadastrar</button>
+                <a href="login.html" class="signup-link">Já tenho uma conta</a>
+            </form>
+            <footer>
+                <small>2025 | Desenvolvido por <a href="#">Brenda Julya</a></small>
+            </footer>
+        </div>
+        <div class="login-right"></div>
+    </div>
+    <script>
+    document.getElementById('cadastro-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = document.getElementById('user').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const msg = document.getElementById('cadastro-message');
+
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        if (users.find(u => u.user === user)) {
+            msg.textContent = 'Este e-mail já está cadastrado!';
+            msg.classList.add('show');
+            return;
+        }
+        users.push({ user, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        msg.textContent = 'Cadastro realizado com sucesso! Redirecionando...';
+        msg.classList.add('show');
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1500);
+    });
+    </script>
+</body>
+</html>

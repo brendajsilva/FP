@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha | FP Sellection</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-split">
+        <div class="login-left">
+            <form class="login-box" id="reset-form">
+                <h1>Recuperar <span class="gradient-text">Senha</span></h1>
+                <div class="input-group">
+                    <label for="reset-user">Email</label>
+                    <input type="text" id="reset-user" name="reset-user" required autocomplete="username">
+                </div>
+                <div class="input-group" id="new-pass-group" style="display:none; position:relative;">
+                    <label for="new-password">Nova Senha</label>
+                    <input type="password" id="new-password" name="new-password" required autocomplete="new-password">
+                    <button type="button" id="toggle-password" style="position:absolute; right:10px; top:35px; background:none; border:none; cursor:pointer;">
+                        <span id="eye-icon" style="font-size:1.2em;">👁️</span>
+                    </button>
+                </div>
+                <div id="reset-message" class="login-message"></div>
+                <button type="submit" id="reset-btn">Enviar</button>
+                <a href="login.html" class="signup-link">Voltar ao login</a>
+            </form>
+            <footer>
+                <small>2025 | Desenvolvido por <a href="#">Brenda Julya de Souza Freitas da Silva</a></small>
+            </footer>
+        </div>
+        <div class="login-right"></div>
+    </div>
+    <script>
+    const form = document.getElementById('reset-form');
+    const userInput = document.getElementById('reset-user');
+    const newPassGroup = document.getElementById('new-pass-group');
+    const newPassInput = document.getElementById('new-password');
+    const msg = document.getElementById('reset-message');
+    const btn = document.getElementById('reset-btn');
+    const togglePassword = document.getElementById('toggle-password');
+    const eyeIcon = document.getElementById('eye-icon');
+    let foundUser = null;
+
+    togglePassword.addEventListener('click', function() {
+        if (newPassInput.type === "password") {
+            newPassInput.type = "text";
+            eyeIcon.textContent = "🙈";
+        } else {
+            newPassInput.type = "password";
+            eyeIcon.textContent = "👁️";
+        }
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        msg.textContent = '';
+        msg.classList.remove('show');
+
+        if (!foundUser) {
+            // Primeira etapa: verificar se o usuário existe
+            const user = userInput.value.trim();
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            foundUser = users.find(u => u.user === user);
+            if (!foundUser) {
+                msg.textContent = 'Usuário não encontrado!';
+                msg.classList.add('show');
+                return;
+            }
+            // Usuário encontrado, mostrar campo de nova senha
+            userInput.disabled = true;
+            newPassGroup.style.display = 'flex';
+            btn.textContent = 'Redefinir Senha';
+            msg.textContent = 'Usuário encontrado! Digite a nova senha.';
+            msg.classList.add('show');
+        } else {
+            // Segunda etapa: redefinir senha
+            const newPassword = newPassInput.value.trim();
+            if (newPassword.length < 3) {
+                msg.textContent = 'A nova senha deve ter pelo menos 3 caracteres.';
+                msg.classList.add('show');
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            users = users.map(u => u.user === foundUser.user ? { ...u, password: newPassword } : u);
+            localStorage.setItem('users', JSON.stringify(users));
+            msg.textContent = 'Senha redefinida com sucesso! Faça login.';
+            msg.classList.add('show');
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+        }
+    });
+    </script>
+</body>
+</html>
