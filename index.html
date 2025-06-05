@@ -17,6 +17,7 @@
         window.location.href = "login.html";
     }
     </script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 
 <body>
@@ -24,9 +25,9 @@
         <img src="./img/logo.png" alt="logo fp">
         <nav>
             <ul>
-                <li>Home</li>
-                <li>Carros</li>
-                <li>Fale Conosco</li>
+                <a>Home</a>
+                <a>Carros</a>
+                <a>Fale Conosco</a>
             </ul>
         </nav>
     </header>
@@ -89,6 +90,13 @@
         </div>
     </section>
     <button onclick="logout()" style="position:fixed;top:20px;right:20px;z-index:999;">Sair</button>
+    <div id="modal-saiba-mais" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2 id="modal-titulo"></h2>
+            <ul id="modal-lista-pecas"></ul>
+        </div>
+    </div>
     <script src="script.js"></script>
     <script>
     if (!sessionStorage.getItem('loggedUser')) {
@@ -99,6 +107,21 @@
         sessionStorage.removeItem('loggedUser');
         window.location.href = "login.html";
     }
+
+    // Menu funcional
+    document.getElementById('home-link').onclick = e => {
+        e.preventDefault();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+    document.getElementById('carros-link').onclick = e => {
+        e.preventDefault();
+        document.querySelector('section').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('contato-link').onclick = e => {
+        e.preventDefault();
+        // Se tiver um rodapé ou seção de contato, ajuste o seletor abaixo
+        window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+    };
     </script>
 </body>
 
